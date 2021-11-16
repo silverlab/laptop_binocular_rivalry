@@ -1,0 +1,5 @@
+﻿session,participant,TrialNumber,topColor,topOri,redOpacity,ran,order,keyDur,keyRT,keyName,keys,expTime-TrialStart,expTime-TrialEnd,eventKeys
+0,0,1,red,45,0.5,1.0,0.0,[],[],[],[],0.0431081,2.0257053,[]
+0,0,2,blue,45,0.5,1.0,1.0,[],[],[],[],33.990887,35.98921,[['down', 51.51603259998956]]
+0,0,3,red,135,0.5,1.0,2.0,[],[],[],[],66.59958,68.599396,[['down', 84.1302171999996]]
+0,0,4,blue,135,0.5,1.0,3.0,[],[],[],[],100.06162,102.06159,[['down', 117.59286189998966]]
