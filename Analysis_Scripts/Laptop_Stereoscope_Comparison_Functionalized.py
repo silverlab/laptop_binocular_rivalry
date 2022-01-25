@@ -1,3 +1,6 @@
+# Analysis Functions for displaying responses during Binocular Rivalry 
+# Written by Miranda Shen, 2021
+
 #!/usr/bin/env python
 # coding: utf-8
 
