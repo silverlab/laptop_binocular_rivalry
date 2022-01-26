@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Project headed by Liz Lawler
+Collaborators:
+    Jen Holmberg, UC Berkeley PhD Student - worked on Catch Trials
+    Miranda Shen, UC Berkeley Undergraduate student - worked on countdown 
+    functions and formatting saved data 
+"""
 
 from __future__ import absolute_import, division, print_function
 
