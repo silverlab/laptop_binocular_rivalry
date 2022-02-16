@@ -24,8 +24,8 @@ from random import random
 cwd = os.getcwd()
 dataDir = os.path.join(cwd, 'Data')
 demoDir = os.path.join(cwd, 'demo_images')
-red_demoImg = os.path.join(demoDir, 'Red_45.png')
-blue_demoImg = os.path.join(demoDir, 'Blue_45.png')
+red_demoImg = os.path.join(demoDir, 'RightRed_45.png')
+blue_demoImg = os.path.join(demoDir, 'LeftBlue_45.png')
 mixed_demoImg = os.path.join(demoDir, 'MixedPercept_circle.png')
 
 def startCountdown(windowObject, countDuration, textSize, wrapWidthScale):
@@ -116,8 +116,8 @@ def runRivalryTrials(trialHandlerObject,
                     keyboardObject, 
                     windowObject,
                     topImageParams,
-                    redKey, 
-                    blueKey, 
+                    rightKey, 
+                    leftKey, 
                     mixedKey, 
                     rivalryLength,
                     wrongKeyNote, 
@@ -133,7 +133,7 @@ def runRivalryTrials(trialHandlerObject,
         botColor = 'blue'
     elif topColor == 'blue':
         botColor = 'red'
-    topStim, botStim = makeGratingStimuliForRivalry(windowObject, topOrientation,botOrientation, topColor, botColor, gratingSize)
+    topStim, botStim = makeGratingStimuliForRivalry(windowObject, topOrientation, botOrientation, topColor, botColor, gratingSize)
      
     botStim.draw()
     topStim.draw()
@@ -162,7 +162,7 @@ def runRivalryTrials(trialHandlerObject,
             
             if len(keyResp) > 0 : # check to make sure we have key presses
                 for key in keyResp:
-                    if key.name not in [redKey, blueKey, mixedKey]: # incorrect key pressed
+                    if key.name not in [rightKey, leftKey, mixedKey]: # incorrect key pressed
                         # make error sound
                         wrongKeyNote.play()
             
@@ -214,8 +214,8 @@ def runRivalryTrials(trialHandlerObject,
 def runGlassesDemo(keyboardObject, 
                     windowObject,
                     topImageParams,
-                    redKey, 
-                    blueKey, 
+                    rightKey, 
+                    leftKey, 
                     mixedKey, 
                     rivalryLength,
                     wrongKeyNote, 
@@ -223,12 +223,12 @@ def runGlassesDemo(keyboardObject,
                     bottomTextPos,
                     textSize):
                         
-    redText = visual.TextStim(windowObject, 
-        text = "Red Key Down",
+    rightText = visual.TextStim(windowObject, 
+        text = "Right Key Down",
         color = "white",
         font = "Open Sans", height = textSize, pos=bottomTextPos, alignText="center")
-    blueText = visual.TextStim(windowObject, 
-        text = "Blue Key Down",
+    leftText = visual.TextStim(windowObject, 
+        text = "Left Key Down",
         color = "white",
         font = "Open Sans", height = textSize, pos=bottomTextPos, alignText="center")
     mixedText = visual.TextStim(windowObject, 
@@ -261,12 +261,13 @@ def runGlassesDemo(keyboardObject,
     keyboardObject.clearEvents(eventType='Keyboard')
     
     refresh = 0
+
     # start rivarly trial 
     while rivalryTimer.getTime() > 0: # countdown for the rivalry duration
         #keyResp = keyboardObject.getKeys(waitRelease=True, clear=True) # get keypresses from the subject
         
         keyStr = ''
-        responseKeys = [redKey, blueKey, mixedKey, 'q']
+        responseKeys = [rightKey, leftKey, mixedKey, 'q']
         botStim.draw()
         topStim.draw()
         
@@ -281,7 +282,7 @@ def runGlassesDemo(keyboardObject,
         if len(keyArray) > 0:
             keyStr = keys[-1].name
 
-            if keys[-1].name == redKey:
+            if keys[-1].name == rightKey:
                 if keys[-1].duration is None:
                     redText.draw()
                 else:
@@ -289,7 +290,7 @@ def runGlassesDemo(keyboardObject,
                     emptyText.draw()
 
             
-            if keys[-1].name == blueKey:
+            if keys[-1].name == leftKey:
                 if keys[-1].duration is None:
                     blueText.draw()
                 else:
@@ -305,14 +306,14 @@ def runGlassesDemo(keyboardObject,
         windowObject.flip()
 
 
-def runPracticeTest(redKey, mixedKey, blueKey, currentColor, practiceTime, windowObject, keyboardObj, textSize, bottomTexPos, imgScale):
+def runPracticeTest(rightKey, mixedKey, leftKey, currentOri, practiceTime, windowObject, keyboardObj, textSize, bottomTexPos, imgScale):
     ## make demo stimuli
-    if currentColor == 'red':
-        demoImg = red_demoImg
-        correctKey = redKey
-    elif currentColor =='blue':
-        demoImg = blue_demoImg
-        correctKey = blueKey
+    if currentOri == 'right':
+        demoImg = right_demoImg
+        correctKey = rightKey
+    elif currentOri =='left':
+        demoImg = left_demoImg
+        correctKey = leftKey
     elif currentColor == 'mixed':
         demoImg = mixed_demoImg
         correctKey = mixedKey
@@ -343,7 +344,7 @@ def runPracticeTest(redKey, mixedKey, blueKey, currentColor, practiceTime, windo
 
     while timer.getTime() > 0:
         keyStr = ''
-        responseKeys = [redKey, blueKey, mixedKey, 'q']
+        responseKeys = [rightKey, leftKey, mixedKey, 'q']
         demoStim.draw()
         
         if refresh:
