@@ -45,8 +45,8 @@ breakTime = 3#0
 textSize = 0.7 # height of the text to display during instructions
 
 ## Keys for stimulus
-redKey = 'left' 
-blueKey = 'right'
+leftKey = 'left' 
+rightKey = 'right'
 mixedKey = 'space'
 nextKey = ['down', 'return']
 
@@ -54,8 +54,8 @@ nextKey = ['down', 'return']
 cwd = os.getcwd()
 dataDir = os.path.join(cwd, 'Data')
 demoDir = os.path.join(cwd, 'demo_images')
-red_demoImg = os.path.join(demoDir, 'Red_45.png')
-blue_demoImg = os.path.join(demoDir, 'Blue_45.png')
+right_demoImg = os.path.join(demoDir, 'RightRed_45.png')
+left_demoImg = os.path.join(demoDir, 'LeftBlue_45.png')
 mixed_demoImg = os.path.join(demoDir, 'MixedPercept_circle.png')
 red_blue_glassesImg = os.path.join(demoDir, 'red_blue_glasses_1.png')
 
@@ -175,13 +175,13 @@ if skipIntro == 0:
     win.flip()
     event.waitKeys()
     
-    # Red Stimulus
-    redDemoStim = visual.ImageStim(win, image=red_demoImg, pos=demoStimPos)# color='red')
-    redDemoStim.size = redDemoStim.size * imgScale
-    redDemoStim.draw()
+    # Right Stimulus
+    rightDemoStim = visual.ImageStim(win, image=right_demoImg, pos=demoStimPos)
+    rightDemoStim.size = rightDemoStim.size * imgScale
+    rightDemoStim.draw()
     
     topText = visual.TextStim(win, 
-        text = "When you see the RED pattern, press the left key on the keyboard. \n Hold LEFT key down as long as you see a RED pattern",
+        text = "When you see the RIGHT pattern, press the right key on the keyboard. \n Hold RIGHT key down as long as you see a RIGHT pattern",
         color = "white",
         font = "Open Sans", height = textSize, pos=upperTexPos, alignText="center", wrapWidth = wrapWidthScale)
     bottomText = visual.TextStim(win, 
@@ -193,28 +193,28 @@ if skipIntro == 0:
     win.flip()
     event.waitKeys()
     
-    runRivalry.waitForKey(win, kb, redKey)
+    runRivalry.waitForKey(win, kb, rightKey)
     
-    # Blue Stimulus
-    blueDemoStim = visual.ImageStim(win, image=blue_demoImg, pos=demoStimPos)# color='red')
-    blueDemoStim.size = blueDemoStim.size *imgScale
-    blueDemoStim.draw()
+    # Left Stimulus
+    leftDemoStim = visual.ImageStim(win, image=left_demoImg, pos=demoStimPos)
+    leftDemoStim.size = leftDemoStim.size *imgScale
+    leftDemoStim.draw()
     
     topText = visual.TextStim(win, 
-        text = "When you see the BLUE pattern, press the right key on the keyboard. \n Hold RIGHT key down as long as you see a BLUE pattern",
+        text = "When you see the LEFT pattern, press the left key on the keyboard. \n Hold LEFT key down as long as you see a left pattern",
         color = "white",
         font = "Open Sans", height = textSize, pos=upperTexPos, alignText="center", wrapWidth = wrapWidthScale)
     bottomText = visual.TextStim(win, 
-        text = "Press the right key on the keyboard now",
+        text = "Press the left key on the keyboard now",
         color = "white",
         font = "Open Sans", height = textSize, pos=bottomTexPos, alignText="center", wrapWidth = wrapWidthScale)
     topText.draw()
     bottomText.draw()
     win.flip()
-    runRivalry.waitForKey(win, kb, blueKey)
+    runRivalry.waitForKey(win, kb, leftKey)
     
     # Mixex Stimulus
-    mixedDemoStim = visual.ImageStim(win, image=mixed_demoImg, pos=demoStimPos)# color='red')
+    mixedDemoStim = visual.ImageStim(win, image=mixed_demoImg, pos=demoStimPos)
     mixedDemoStim.size = mixedDemoStim.size *imgScale
     mixedDemoStim.draw()
     
@@ -242,12 +242,12 @@ if skipIntro == 0:
     win.flip()
     core.wait(1.0)
     
-    # Red Demo
-    runRivalry.runPracticeTest(redKey, mixedKey, blueKey, 'red', demoTime, win, kb, textSize, bottomTexPos, imgScale)
+    # Right Demo
+    runRivalry.runPracticeTest(rightKey, mixedKey, leftKey, 'right', demoTime, win, kb, textSize, bottomTexPos, imgScale)
     
     # Pause Screen
     waitText = visual.TextStim(win, 
-        text = u"Next, you'll practice pressing RIGHT for BLUE \n Press ENTER or \u2193 to start",
+        text = u"Next, you'll practice pressing the right arrow key for RIGHT \n Press ENTER or \u2193 to start",
         color = "white",
         font = "Open Sans", height = textSize, pos=(0,0), wrapWidth = wrapWidthScale, alignText="center")
     waitText.draw()
@@ -256,8 +256,8 @@ if skipIntro == 0:
     win.flip()
     core.wait(1.0)
     
-    # Blue Demo
-    runRivalry.runPracticeTest(redKey, mixedKey, blueKey, 'blue', demoTime, win, kb, textSize, bottomTexPos, imgScale)
+    # Left Demo
+    runRivalry.runPracticeTest(leftKey, mixedKey, rightKey, 'left', demoTime, win, kb, textSize, bottomTexPos, imgScale)
     
     # Pause Screen
     waitText = visual.TextStim(win, 
@@ -271,13 +271,11 @@ if skipIntro == 0:
     core.wait(1.0)
     
     # Mixed Demo 
-    runRivalry.runPracticeTest(redKey, mixedKey, blueKey, 'mixed', demoTime, win, kb, textSize, bottomTexPos, imgScale)
+    runRivalry.runPracticeTest(rightKey, mixedKey, leftKey, 'mixed', demoTime, win, kb, textSize, bottomTexPos, imgScale)
     
     # Practice with the glasses:
     
     # put on glasses now 
-    #glassesStim = visual.ImageStim(win, image=red_blue_glassesImg, pos=(-10,shiftY))# color='red')
-    #glassesStim.draw()
     glassesText = visual.TextStim(win, 
         text = u"Please put on your Red/Blue glasses now. \n\n You'll practice once more with the glasses on \n Press ENTER or \u2193 to start",
         color = "white",
@@ -294,7 +292,7 @@ if skipIntro == 0:
     demoParams = {}
     demoParams['color'] = 'red'
     demoParams['ori'] = 45
-    runRivalry.runGlassesDemo(kb, win, demoParams, redKey, blueKey, mixedKey, glassesDemoLength,wrongKeyNote, gratingSize, bottomTexPos, textSize)
+    runRivalry.runGlassesDemo(kb, win, demoParams, rightKey, leftKey, mixedKey, glassesDemoLength,wrongKeyNote, gratingSize, bottomTexPos, textSize)
     win.flip()
     
 # Ask subjects if ready
@@ -311,7 +309,7 @@ core.wait(1.0)
 runRivalry.startCountdown(win, 5, textSize, wrapWidthScale)
 
 
-### TRial Handler Test
+### Trial Handler Test
 # run the experiment
 nDone = 0
 
@@ -332,13 +330,11 @@ for thisTrial in trials:  # handler can act like a for loop
     topParams['redOpacity'] = thisTrial['redOpacity']
     
     
-    runRivalry.runRivalryTrials(trials, kb, win, topParams, redKey, blueKey, 
+    runRivalry.runRivalryTrials(trials, kb, win, topParams, rightKey, leftKey, 
         mixedKey, rivalryLength, wrongKeyNote, gratingSize, expClock, textSize,
         wrapWidthScale)
     thisExp.nextEntry() # advance the experiment handler 
     
-    #runRivalryTesting.runRivalryTrials_usingPsychopyGratingStim(trials, kb, win, topParams, redKey, blueKey, mixedKey, rivalryLength, wrongKeyNote, gratingSize, expClock)
-
     # clear out the keyboard
     kb.clearEvents()
     kb.clock.reset()
@@ -365,9 +361,6 @@ for thisTrial in trials:  # handler can act like a for loop
         win.flip()
         runRivalry.waitForKey(win, kb, nextKey)
     
-
-
-
 
 win.close()
 core.quit()
