@@ -211,6 +211,11 @@ def runRivalryTrials(trialHandlerObject,
     trialHandlerObject.addData('expTime-TrialEnd', trialEnd)
     trialHandlerObject.addData('eventKeys', additionalKeySave)
 
+    # If more than [X fraction] of key presses are not left, right, or mixed key, flag for trial redo.
+    Xfraction = 2/3
+    if ((trialHandlerObject.keyName.count(rightKey) + trialHandlerObject.keyName.count(leftKey) + trialHandlerObject.keyName.count(mixedKey))/len(trialHandlerObject.keyName)) < Xfraction :
+        trialHandlerObject.addData('Flag', 'Irregular button presses')
+
 def runGlassesDemo(keyboardObject, 
                     windowObject,
                     topImageParams,

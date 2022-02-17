@@ -23,7 +23,7 @@ from builtins import range
 from random import random
 from scipy import ndimage
 
-import BR_functions_v2 as runRivalry
+import BR_functions_v3 as runRivalry
 
 
 
@@ -334,6 +334,12 @@ for thisTrial in trials:  # handler can act like a for loop
         mixedKey, rivalryLength, wrongKeyNote, gratingSize, expClock, textSize,
         wrapWidthScale)
     thisExp.nextEntry() # advance the experiment handler 
+
+    # Check if trial just completed had irregular button presses. 
+    # If so, do another trial
+    if trials.Flag == 'Irregular button presses' :
+        numTrials += 1
+
     
     # clear out the keyboard
     kb.clearEvents()
