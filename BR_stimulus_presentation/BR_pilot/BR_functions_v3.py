@@ -112,6 +112,7 @@ def makeGratingStimuliForRivalry(windowObject, bottomOri, topOri, bottomColor, t
     
     return topStim, botStim
 
+
 def runRivalryTrials(trialHandlerObject, 
                     keyboardObject, 
                     windowObject,

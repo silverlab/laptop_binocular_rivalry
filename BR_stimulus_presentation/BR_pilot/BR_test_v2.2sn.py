@@ -313,7 +313,6 @@ runRivalry.startCountdown(win, 5, textSize, wrapWidthScale)
 # run the experiment
 nDone = 0
 
-
 kb.clearEvents()
 expClock = core.MonotonicClock()
 count = 0
@@ -340,7 +339,6 @@ for thisTrial in trials:  # handler can act like a for loop
     if trials.Flag == 'Irregular button presses' :
         numTrials += 1
 
-    
     # clear out the keyboard
     kb.clearEvents()
     kb.clock.reset()
