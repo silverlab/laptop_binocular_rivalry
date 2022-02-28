@@ -41,6 +41,7 @@ trialClock = core.Clock()
 kb = keyboard.Keyboard()
 demoTime = 5
 rivalryLength = 5#100
+CatchTrial_Length = 7
 breakTime = 3#0
 textSize = 0.7 # height of the text to display during instructions
 
@@ -341,7 +342,20 @@ for thisTrial in trials:  # handler can act like a for loop
     topParams['ori'] = topOrientation 
     topParams['redOpacity'] = thisTrial['redOpacity']
     
-    
+    CatchTrial_ButtonCheck = runRivalry.runRivalryCatchTrials(trials, kb, win, topParams, rightKey, leftKey, 
+        mixedKey, CatchTrial_Length, wrongKeyNote, gratingSize, expClock, textSize,
+        wrapWidthScale)
+    print(CatchTrial_ButtonCheck)
+    if CatchTrial_ButtonCheck == 1:
+        irregularText = visual.TextStim(win, 
+        text = u"Irregular button presses detected: Please notify experimenter.",
+        color = "white",
+        font = "Open Sans", height = textSize, pos=(0,0), alignText="center")
+        irregularText.draw()
+        win.flip()
+        runRivalry.waitForKey(win, kb, nextKey)
+
+
     runRivalry.runRivalryTrials(trials, kb, win, topParams, rightKey, leftKey, 
         mixedKey, rivalryLength, wrongKeyNote, gratingSize, expClock, textSize,
         wrapWidthScale)

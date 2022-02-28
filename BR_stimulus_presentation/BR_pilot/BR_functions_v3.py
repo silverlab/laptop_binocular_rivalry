@@ -112,6 +112,46 @@ def makeGratingStimuliForRivalry(windowObject, bottomOri, topOri, bottomColor, t
     
     return topStim, botStim
 
+def makeGratingStimuliForCatchTrial(windowObject, bottomOri, topOri, bottomColor, topColor, stimulusSize, stimulusPhase=0.0, stimulusCPD=6.0):
+    '''Description'''
+    colorDict = {
+        "blue": 2,
+        "green": 1,
+        "red": 0
+    }
+    
+    botColorIndex = 2#0 #9/17 trying force blue to be top color to remove red ghosting #colorDict[bottomColor]
+    topColorIndex = 0#2 #colorDict[topColor]
+    
+    gh = 256
+    gw = 256
+    
+    topStim = visual.GratingStim(win=windowObject, size=(stimulusSize, stimulusSize), ori=topOri, mask='raisedCos', )
+    
+    baseGrating = filters.makeGrating(res=256)
+    
+    top_hsv_tex = np.ones((gh, gw, 3))
+    top_hsv_tex = top_hsv_tex *-1
+    
+    top_hsv_tex[...,topColorIndex] = (baseGrating)/2.0
+    
+    topStim.tex = top_hsv_tex #psychopy.tools.colorspacetools.hsv2rgb(hsv_tex)
+    topStim.sf=350.0/256
+
+    botStim = visual.GratingStim(win=windowObject, size=(stimulusSize, stimulusSize), ori=bottomOri, mask='raisedCos', )
+    
+    baseGrating = filters.makeGrating(res=256)
+    
+    bot_hsv_tex = np.ones((gh, gw, 3))
+    bot_hsv_tex = bot_hsv_tex *-1
+    
+    bot_hsv_tex[...,botColorIndex] = (baseGrating)/2.0
+    
+    botStim.tex = bot_hsv_tex #psychopy.tools.colorspacetools.hsv2rgb(hsv_tex)
+    botStim.sf=350.0/256
+    
+    return topStim, botStim
+
 
 def runRivalryTrials(trialHandlerObject, 
                     keyboardObject, 
@@ -218,6 +258,128 @@ def runRivalryTrials(trialHandlerObject,
         trialHandlerObject.addData('ButtonCheck', 1)
     else: 
         trialHandlerObject.addData('ButtonCheck', 0)
+
+def runRivalryCatchTrials(trialHandlerObject, 
+                    keyboardObject, 
+                    windowObject,
+                    topImageParams,
+                    rightKey, 
+                    leftKey, 
+                    mixedKey, 
+                    CatchTrial_Length,
+                    wrongKeyNote, 
+                    gratingSize,
+                    expClockObj,
+                    textSize,
+                    wrapWidthScale):
+    # display this trial's stimuli on the screen
+    topOrientation = topImageParams['ori']
+    topColor = topImageParams['color']
+    if topOrientation == 45:
+        botOrientation = 135
+    elif topOrientation == 135:
+        botOrientation = 45
+    if topColor == 'red':
+        botColor = 'blue'
+    elif topColor == 'blue':
+        botColor = 'red'
+    topStim, botStim = makeGratingStimuliForCatchTrial(windowObject, topOrientation, botOrientation, topColor, botColor, gratingSize)
+    
+    coinflip = np.random.randint(0, 2)
+    if coinflip == 0:
+        botStim.draw()
+        if botOrientation == 45:
+            correct_Key = leftKey
+        elif botOrientation == 135:
+            correct_Key = rightKey
+    elif coinflip == 1:
+        topStim.draw()
+        if topOrientation == 45:
+            correct_Key = leftKey
+        elif topOrientation == 135:
+            correct_Key = rightKey
+    windowObject.flip()
+    
+    
+    # initialize response arrays
+    allResponses_RT = []
+    allResponses_Dur = []
+    allResponses_Names = []
+    allResponses = []
+    
+    # reset keyboard clock
+    keyboardObject.clock.reset()
+    keyboardObject.clearEvents(eventType='Keyboard')
+    
+    rivalryTimer = core.CountdownTimer(CatchTrial_Length) # create trial timer object
+    rivalryBuffer = core.CountdownTimer(CatchTrial_Length+2)
+    
+    #windowObject._getFrame().save('laptop_stim.png') - useful for saving images of stimuli 
+    # start rivarly trial 
+    trialStart = expClockObj.getTime()
+    while rivalryBuffer.getTime() > 0: # countdown for the rivalry duration
+        while rivalryTimer.getTime() > 0:
+            keyResp = keyboardObject.getKeys(waitRelease=True, clear=True) # get keypresses from the subject
+            
+            if len(keyResp) > 0 : # check to make sure we have key presses
+                for key in keyResp:
+                    if key.name not in [rightKey, leftKey, mixedKey]: # incorrect key pressed
+                        # make error sound
+                        wrongKeyNote.play()
+            
+                if 'q' in keyResp:
+                    windowObject.close()
+                    core.quit()
+            
+            # Compile multiple keyresponses as they come in
+            allResponses_RT.extend([key.rt for key in keyResp])
+            allResponses.extend(keyResp)
+            allResponses_Dur.extend([key.duration for key in keyResp])
+            allResponses_Names.extend([key.name for key in keyResp])
+        
+        # END rivalry timer 
+        #if keyResp
+        trialEnd = expClockObj.getTime()
+        
+        displayText = visual.TextStim(windowObject, 
+            text = u"Release Key",
+            color = "white",
+            font = "Open Sans", height = textSize, pos=(0,0), alignText="center", wrapWidth = wrapWidthScale)
+        displayText.draw()
+        windowObject.flip()
+        
+        
+        # out of rivalry While loop but in buffer
+        keyResp = keyboardObject.getKeys(waitRelease=True, clear=True)
+        if len(keyResp) > 0 :
+            trialHandlerObject.addData('CatchTrial_Flag', 'cut off by trial end')
+            allResponses_RT.extend([key.rt for key in keyResp])
+            allResponses.extend(keyResp)
+            allResponses_Dur.extend([key.duration for key in keyResp])
+            allResponses_Names.extend([key.name for key in keyResp])
+    
+    additionalKeySave = event.getKeys(timeStamped=True)
+
+#    if rivalryTime.getTime() == 0.0 and key.duration is None:
+        
+
+    # save key responses to the trialHandler 
+    trialHandlerObject.addData('CatchTrial_keyDur', allResponses_Dur)
+    trialHandlerObject.addData('CatchTrial_keyRT', allResponses_RT)
+    trialHandlerObject.addData('CatchTrial_keyName', allResponses_Names)
+    trialHandlerObject.addData('CatchTrial_keys', allResponses)
+    trialHandlerObject.addData('CatchTrial_expTime-TrialStart', trialStart)
+    trialHandlerObject.addData('CatchTrial_expTime-TrialEnd', trialEnd)
+    trialHandlerObject.addData('CatchTrial_eventKeys', additionalKeySave)
+
+    # If more than [X fraction] of key presses are not the correct key, flag for trial redo.
+    Xfraction = 1/2
+    if ((allResponses_Names.count(correct_Key))/len(allResponses_Names)) < Xfraction :
+        trialHandlerObject.addData('CatchTrial_ButtonCheck', 1)
+        return 1
+    else: 
+        trialHandlerObject.addData('CatchTrial_ButtonCheck', 0)
+        return 0
 
 def runGlassesDemo(keyboardObject, 
                     windowObject,
