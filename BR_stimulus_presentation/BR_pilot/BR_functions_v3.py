@@ -24,8 +24,8 @@ from random import random
 cwd = os.getcwd()
 dataDir = os.path.join(cwd, 'Data')
 demoDir = os.path.join(cwd, 'demo_images')
-red_demoImg = os.path.join(demoDir, 'RightRed_45.png')
-blue_demoImg = os.path.join(demoDir, 'LeftBlue_45.png')
+right_demoImg = os.path.join(demoDir, 'RightRed_45.png')
+left_demoImg = os.path.join(demoDir, 'LeftBlue_45.png')
 mixed_demoImg = os.path.join(demoDir, 'MixedPercept_circle.png')
 
 def startCountdown(windowObject, countDuration, textSize, wrapWidthScale):
@@ -214,8 +214,10 @@ def runRivalryTrials(trialHandlerObject,
 
     # If more than [X fraction] of key presses are not left, right, or mixed key, flag for trial redo.
     Xfraction = 2/3
-    if ((trialHandlerObject.keyName.count(rightKey) + trialHandlerObject.keyName.count(leftKey) + trialHandlerObject.keyName.count(mixedKey))/len(trialHandlerObject.keyName)) < Xfraction :
-        trialHandlerObject.addData('Flag', 'Irregular button presses')
+    if ((allResponses_Names.count(rightKey) + allResponses_Names.count(leftKey) + allResponses_Names.count(mixedKey))/len(allResponses_Names)) < Xfraction :
+        trialHandlerObject.addData('ButtonCheck', 1)
+    else: 
+        trialHandlerObject.addData('ButtonCheck', 0)
 
 def runGlassesDemo(keyboardObject, 
                     windowObject,
@@ -290,7 +292,7 @@ def runGlassesDemo(keyboardObject,
 
             if keys[-1].name == rightKey:
                 if keys[-1].duration is None:
-                    redText.draw()
+                    rightText.draw()
                 else:
                     refresh = 1
                     emptyText.draw()
@@ -298,7 +300,7 @@ def runGlassesDemo(keyboardObject,
             
             if keys[-1].name == leftKey:
                 if keys[-1].duration is None:
-                    blueText.draw()
+                    leftText.draw()
                 else:
                     refresh = 1
                     emptyText.draw()
@@ -320,7 +322,7 @@ def runPracticeTest(rightKey, mixedKey, leftKey, currentOri, practiceTime, windo
     elif currentOri =='left':
         demoImg = left_demoImg
         correctKey = leftKey
-    elif currentColor == 'mixed':
+    elif currentOri == 'mixed':
         demoImg = mixed_demoImg
         correctKey = mixedKey
     demoStim = visual.ImageStim(windowObject, image=demoImg, pos=(0,0))

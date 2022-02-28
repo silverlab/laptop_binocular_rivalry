@@ -92,7 +92,9 @@ skipIntro = int(inputData[2])
     
 
 # create a window to draw in
-thisMonitor = monitors.Monitor('Lenovo_CarbonX1')
+# thisMonitor = monitors.Monitor('Lenovo_CarbonX1')
+thisMonitor = monitors.Monitor('testMonitor')
+
 thisMonitor.setDistance(60)
 # monitors.Monitor("testMonitor")
 win = visual.Window(allowGUI=False, fullscr=True,screen=1, units='deg', size = [1920, 1080], monitor=thisMonitor) #fullscr=True, units="deg",
@@ -155,20 +157,20 @@ if skipIntro == 0:
     # Keyboard Screen
     
     # Stimulus Screen 
-    redDemoStim = visual.ImageStim(win, image=red_demoImg, pos=(-9,shiftY))# color='red')
-    redDemoStim.size = redDemoStim.size * imgScale
-    redDemoStim.draw()
+    rightDemoStim = visual.ImageStim(win, image=right_demoImg, pos=(-9,shiftY))# color='red')
+    rightDemoStim.size = rightDemoStim.size * imgScale
+    rightDemoStim.draw()
     
-    blueDemoStim = visual.ImageStim(win, image=blue_demoImg, pos=(0,shiftY))# color='red')
-    blueDemoStim.size = blueDemoStim.size *imgScale
-    blueDemoStim.draw()
+    leftDemoStim = visual.ImageStim(win, image=left_demoImg, pos=(0,shiftY))# color='red')
+    leftDemoStim.size = leftDemoStim.size *imgScale
+    leftDemoStim.draw()
     
     mixedDemoStim = visual.ImageStim(win, image=mixed_demoImg, pos=(9,shiftY))# color='red')
     mixedDemoStim.size = mixedDemoStim.size *imgScale
     mixedDemoStim.draw()
     
     bottomText = visual.TextStim(win, 
-        text = "In the next experiment, you could either see a RED pattern, a BLUE pattern or a MIX between the two. \n When you see a specific pattern, you'll be asked to PRESS and HOLD each key for as long as you see that respective pattern \n Hit any key to continue",
+        text = "In the next experiment, you could either see a RIGHT pattern, a LEFT pattern or a MIX between the two. \n When you see a specific pattern, you'll be asked to PRESS and HOLD each key for as long as you see that respective pattern \n Hit any key to continue",
         color = "white",
         font = "Open Sans", height = textSize, alignText='center', pos=bottomTexLongPos, wrapWidth = wrapWidthScale)
     bottomText.draw()
@@ -185,7 +187,7 @@ if skipIntro == 0:
         color = "white",
         font = "Open Sans", height = textSize, pos=upperTexPos, alignText="center", wrapWidth = wrapWidthScale)
     bottomText = visual.TextStim(win, 
-        text = "Press the left key on the keyboard now",
+        text = "Press the right key on the keyboard now",
         color = "white",
         font = "Open Sans", height = textSize, pos=bottomTexPos, alignText="center", wrapWidth = wrapWidthScale)
     topText.draw()
@@ -241,13 +243,24 @@ if skipIntro == 0:
     runRivalry.waitForKey(win, kb, nextKey)
     win.flip()
     core.wait(1.0)
+
+    # Pause Screen
+    waitText = visual.TextStim(win, 
+        text = u"Next, you'll practice holding the right arrow key for RIGHT \n Press ENTER or \u2193 to start",
+        color = "white",
+        font = "Open Sans", height = textSize, pos=(0,0), wrapWidth = wrapWidthScale, alignText="center")
+    waitText.draw()
+    win.flip()
+    runRivalry.waitForKey(win, kb, nextKey)
+    win.flip()
+    core.wait(1.0)
     
     # Right Demo
     runRivalry.runPracticeTest(rightKey, mixedKey, leftKey, 'right', demoTime, win, kb, textSize, bottomTexPos, imgScale)
     
     # Pause Screen
     waitText = visual.TextStim(win, 
-        text = u"Next, you'll practice pressing the right arrow key for RIGHT \n Press ENTER or \u2193 to start",
+        text = u"Next, you'll practice holding the left arrow key for LEFT \n Press ENTER or \u2193 to start",
         color = "white",
         font = "Open Sans", height = textSize, pos=(0,0), wrapWidth = wrapWidthScale, alignText="center")
     waitText.draw()
@@ -257,11 +270,11 @@ if skipIntro == 0:
     core.wait(1.0)
     
     # Left Demo
-    runRivalry.runPracticeTest(leftKey, mixedKey, rightKey, 'left', demoTime, win, kb, textSize, bottomTexPos, imgScale)
+    runRivalry.runPracticeTest(rightKey, mixedKey, leftKey, 'left', demoTime, win, kb, textSize, bottomTexPos, imgScale)
     
     # Pause Screen
     waitText = visual.TextStim(win, 
-        text = u"Next, you'll practice pressing SPACE for MIXED \n Press ENTER or \u2193 to start",
+        text = u"Next, you'll practice holding SPACE for MIXED \n Press ENTER or \u2193 to start",
         color = "white",
         font = "Open Sans", height = textSize, wrapWidth = wrapWidthScale, pos=(0,0), alignText="center")
     waitText.draw()
@@ -334,11 +347,6 @@ for thisTrial in trials:  # handler can act like a for loop
         wrapWidthScale)
     thisExp.nextEntry() # advance the experiment handler 
 
-    # Check if trial just completed had irregular button presses. 
-    # If so, do another trial
-    if trials.Flag == 'Irregular button presses' :
-        numTrials += 1
-
     # clear out the keyboard
     kb.clearEvents()
     kb.clock.reset()
@@ -365,8 +373,17 @@ for thisTrial in trials:  # handler can act like a for loop
         win.flip()
         runRivalry.waitForKey(win, kb, nextKey)
     
+if any(trials.data['ButtonCheck']) == 1:
+    irregularText = visual.TextStim(win, 
+    text = u"Irregular button presses detected: Please notify experimenter.",
+    color = "white",
+    font = "Open Sans", height = textSize, pos=(0,0), alignText="center")
+    irregularText.draw()
+    win.flip()
+    runRivalry.waitForKey(win, kb, nextKey)
 
 win.close()
 core.quit()
+
 
 # The contents of this file are in the public domain.
