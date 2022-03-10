@@ -570,7 +570,7 @@ def sendoutputemail(filename):
     message.attachment = attachedFile
 
     try:
-        sg = SendGridAPIClient('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')
+        sg = SendGridAPIClient('')
         response = sg.send(message)
         print(response.status_code)
         print(response.body)
