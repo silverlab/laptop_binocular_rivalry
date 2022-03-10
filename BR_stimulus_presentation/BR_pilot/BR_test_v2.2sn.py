@@ -127,7 +127,7 @@ trials.saveAsPickle(subjectDataFileName)
 
 # Wide format is useful for analysis with R or SPSS.
 todaysDate = date.today()
-fileName =  "s{}_session{}_{}_BRdata.csv".format(subject, session, todaysDate)# subject Number, session date
+fileName =  "s{}_session{}_{}_BRdata".format(subject, session, todaysDate)# subject Number, session date
 subjectDataFileNameWide = os.path.join(dataDir, fileName)
 df = trials.saveAsWideText(subjectDataFileNameWide, delim=",")
 

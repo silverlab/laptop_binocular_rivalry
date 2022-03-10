@@ -21,11 +21,11 @@ from datetime import date
 from builtins import range
 from random import random
 
-import base64
-import sendgrid
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import (Mail, Attachment, FileContent, FileName, FileType, Disposition)
-
+import email, smtplib, ssl
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 cwd = os.getcwd()
@@ -550,30 +550,54 @@ def runPracticeTest(rightKey, mixedKey, leftKey, currentOri, practiceTime, windo
         windowObject.flip()
 
 def sendoutputemail(filename):
-    message = Mail(
-        from_email='berkeleypsychedelic@gmail.com',
-        to_emails='berkeleypsychedelic@gmail.com',
-        subject='Sendgrid test',
-        html_content='test message')
 
-    with open(filename, 'rb') as f:
-        data = f.read()
-        f.close()
-    encoded_file = base64.b64encode(data).decode()
+    subject = filename
+    body = filename
+    sender_email = "berkeleypsychedelic@yahoo.com"
+    receiver_email = "berkeleypsychedelic@yahoo.com"
+    password = "gbnjyjlevbbqjjhd"
 
-    attachedFile = Attachment(
-        FileContent(encoded_file),
-        FileName(filename),
-        FileType('application/csv'),
-        Disposition('attachment')
+    # Create a multipart message and set headers
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+
+    # Add body to email
+    message.attach(MIMEText(body, "plain"))
+
+    filename = filename  # In same directory as script
+
+    # Open PDF file in binary mode
+    with open("Data/" + filename + ".csv", "rb") as attachment:
+        # Add file as application/octet-stream
+        # Email client can usually download this automatically as attachment
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(attachment.read())
+
+    # Encode file in ASCII characters to send by email    
+    encoders.encode_base64(part)
+
+    # Add header as key/value pair to attachment part
+    part.add_header(
+        "Content-Disposition",
+        f"attachment; filename= {filename}",
     )
-    message.attachment = attachedFile
 
-    try:
-        sg = SendGridAPIClient('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')
-        response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
-    except Exception as e:
-        print(e.message)
+    # Add attachment to message and convert message to string
+    message.attach(part)
+    text = message.as_string()
+
+    # Log in to server using secure context and send email
+    mail = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+    debuglevel = True
+    mail.set_debuglevel(debuglevel)
+    mail.starttls()
+    mail.login(sender_email, password)
+    mail.sendmail(sender_email, receiver_email, message.as_string())
+    mail.quit()
+
+    # context = ssl.create_default_context()
+    # with smtplib.SMTP_SSL("smtp.mail.yahoo.com", 587, context=context) as server:
+    #     server.login(sender_email, password)
+    #     server.sendmail(sender_email, receiver_email, text)
