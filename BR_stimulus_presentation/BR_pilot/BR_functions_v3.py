@@ -549,7 +549,7 @@ def runPracticeTest(rightKey, mixedKey, leftKey, currentOri, practiceTime, windo
                     emptyText.draw()
         windowObject.flip()
 
-def sendoutputemail(filename)
+def sendoutputemail(filename):
     message = Mail(
         from_email='berkeleypsychedelic@gmail.com',
         to_emails='berkeleypsychedelic@gmail.com',
