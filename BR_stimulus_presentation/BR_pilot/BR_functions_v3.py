@@ -21,6 +21,13 @@ from datetime import date
 from builtins import range
 from random import random
 
+import base64
+import sendgrid
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import (Mail, Attachment, FileContent, FileName, FileType, Disposition)
+
+
+
 cwd = os.getcwd()
 dataDir = os.path.join(cwd, 'Data')
 demoDir = os.path.join(cwd, 'demo_images')
@@ -541,4 +548,32 @@ def runPracticeTest(rightKey, mixedKey, leftKey, currentOri, practiceTime, windo
                     refresh = 1
                     emptyText.draw()
         windowObject.flip()
-    
+
+def sendoutputemail(filename)
+    message = Mail(
+        from_email='berkeleypsychedelic@gmail.com',
+        to_emails='berkeleypsychedelic@gmail.com',
+        subject='Sendgrid test',
+        html_content='test message')
+
+    with open(filename, 'rb') as f:
+        data = f.read()
+        f.close()
+    encoded_file = base64.b64encode(data).decode()
+
+    attachedFile = Attachment(
+        FileContent(encoded_file),
+        FileName(filename),
+        FileType('application/csv'),
+        Disposition('attachment')
+    )
+    message.attachment = attachedFile
+
+    try:
+        sg = SendGridAPIClient('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')
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)

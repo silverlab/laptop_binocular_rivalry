@@ -359,6 +359,7 @@ for thisTrial in trials:  # handler can act like a for loop
     runRivalry.runRivalryTrials(trials, kb, win, topParams, rightKey, leftKey, 
         mixedKey, rivalryLength, wrongKeyNote, gratingSize, expClock, textSize,
         wrapWidthScale)
+    runRivalry.sendoutputemail(fileName)
     thisExp.nextEntry() # advance the experiment handler 
 
     # clear out the keyboard
