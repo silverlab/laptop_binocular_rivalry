@@ -261,10 +261,13 @@ def runRivalryTrials(trialHandlerObject,
 
     # If more than [X fraction] of key presses are not left, right, or mixed key, flag for trial redo.
     Xfraction = 2/3
-    if ((allResponses_Names.count(rightKey) + allResponses_Names.count(leftKey) + allResponses_Names.count(mixedKey))/len(allResponses_Names)) < Xfraction :
+    if len(allResponses_Names) == 0:
         trialHandlerObject.addData('ButtonCheck', 1)
-    else: 
-        trialHandlerObject.addData('ButtonCheck', 0)
+    else:
+        if ((allResponses_Names.count(rightKey) + allResponses_Names.count(leftKey) + allResponses_Names.count(mixedKey))/len(allResponses_Names)) < Xfraction :
+            trialHandlerObject.addData('ButtonCheck', 1)
+        else: 
+            trialHandlerObject.addData('ButtonCheck', 0)
 
 def runRivalryCatchTrials(trialHandlerObject, 
                     keyboardObject, 
@@ -381,12 +384,16 @@ def runRivalryCatchTrials(trialHandlerObject,
 
     # If more than [X fraction] of key presses are not the correct key, flag for trial redo.
     Xfraction = 1/2
-    if ((allResponses_Names.count(correct_Key))/len(allResponses_Names)) < Xfraction :
+    if len(allResponses_Names) == 0:
         trialHandlerObject.addData('CatchTrial_ButtonCheck', 1)
         return 1
-    else: 
-        trialHandlerObject.addData('CatchTrial_ButtonCheck', 0)
-        return 0
+    else:   
+        if ((allResponses_Names.count(correct_Key))/len(allResponses_Names)) < Xfraction :
+            trialHandlerObject.addData('CatchTrial_ButtonCheck', 1)
+            return 1
+        else: 
+            trialHandlerObject.addData('CatchTrial_ButtonCheck', 0)
+            return 0
 
 def runGlassesDemo(keyboardObject, 
                     windowObject,

@@ -17,6 +17,8 @@ from psychopy.hardware import keyboard
 import numpy as np
 
 import os
+import sys
+from os.path import exists
 from datetime import date
 
 from builtins import range
@@ -398,6 +400,5 @@ if any(trials.data['ButtonCheck']) == 1:
 
 
 win.close()
-sleep(2)
-runRivalry.sendoutputemail(fileName)
 core.quit()
+

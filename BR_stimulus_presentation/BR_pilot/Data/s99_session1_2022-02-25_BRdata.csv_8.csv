@@ -1,2 +1,0 @@
-﻿topColor,topOri,redOpacity,.thisRepN,.thisTrialN,.thisN,.thisIndex,keyDur,keyRT,keyName,keys,expTime-TrialStart,expTime-TrialEnd,eventKeys,Flag,Session,Participant,
-blue,135,0.5,0,0,0,3,"[0.9962892080075108, 1.303720083029475]","[0.27652941702399403, 1.709365084010642]","['right', 'd']","[<psychopy.hardware.keyboard.KeyPress object at 0x7fbfd898b490>, <psychopy.hardware.keyboard.KeyPress object at 0x7fbfd898b4c0>]",0.02636954199988395,7.016763375024311,"[['right', 19.85253512498457], ['d', 19.86391083401395]]",Irregular button presses,1,99,
