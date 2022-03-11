@@ -588,7 +588,7 @@ def sendoutputemail(filename):
     # Add header as key/value pair to attachment part
     part.add_header(
         "Content-Disposition",
-        f"attachment; filename= {filename}",
+        f"attachment; filename= {filename}.csv",
     )
 
     # Add attachment to message and convert message to string
