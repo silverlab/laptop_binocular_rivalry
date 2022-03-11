@@ -398,6 +398,6 @@ if any(trials.data['ButtonCheck']) == 1:
 
 
 win.close()
-core.quit()
 sleep(2)
 runRivalry.sendoutputemail(fileName)
+core.quit()
