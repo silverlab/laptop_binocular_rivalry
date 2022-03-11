@@ -22,7 +22,7 @@ from datetime import date
 from builtins import range
 from random import random
 from scipy import ndimage
-
+from time import sleep
 import BR_functions_v3 as runRivalry
 
 
@@ -396,9 +396,8 @@ if any(trials.data['ButtonCheck']) == 1:
     win.flip()
     runRivalry.waitForKey(win, kb, nextKey)
 
-runRivalry.sendoutputemail(fileName)
+
 win.close()
 core.quit()
-
-
-# The contents of this file are in the public domain.
+sleep(2)
+runRivalry.sendoutputemail(fileName)
